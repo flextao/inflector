@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="inflector" basedir="." default="jar">
+	<property name="libs.dir" value="${basedir}/lib" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="test.dir" value="${basedir}/test" />
+
+	<property name="targets.dir" value="${basedir}/targets" />
+	<property name="targets.classes.dir" value="${targets.dir}/classes" />
+	<property name="targets.test.classes.dir" value="${targets.dir}/test-classes" />
+	<property name="targets.dist.dir" value="${targets.dir}" />
+	<property name="targets.test-reports.dir" value="${targets.dir}/test-reports" />
+
+	<target name="test" depends="clean, compile, compile-test, jt" />
+	<target name="jar" depends="test, xjar, srcjar" />
+
+	<target name="clean">
+		<delete dir="${targets.dir}" />
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${targets.classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${targets.classes.dir}" debug="true" encoding="utf-8" failonerror="true">
+			<classpath>
+				<fileset dir="${libs.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<include name="**/*.java" />
+		</javac>
+	</target>
+
+	<target name="compile-test">
+		<mkdir dir="${targets.test.classes.dir}" />
+		<javac srcdir="${test.dir}" destdir="${targets.test.classes.dir}" debug="true" encoding="utf-8" failonerror="true">
+			<classpath>
+				<fileset dir="${libs.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<pathelement location="${targets.classes.dir}" />
+			</classpath>
+			<include name="**/*.java" />
+		</javac>
+	</target>
+
+	<target name="xjar">
+		<jar destfile="${targets.dist.dir}/inflector.jar">
+			<fileset dir="${targets.classes.dir}" />
+		</jar>
+	</target>
+
+	<target name="srcjar">
+		<jar destfile="${targets.dist.dir}/inflector-src.jar">
+			<fileset dir="${src.dir}" />
+		</jar>
+	</target>
+	<target name="jt">
+		<mkdir dir="${targets.dir}/test-reports" />
+		<junit printsummary="yes" showoutput="yes" haltonfailure="yes">
+			<formatter type="xml" />
+			<classpath>
+				<pathelement location="${targets.classes.dir}" />
+				<pathelement location="${targets.test.classes.dir}" />
+		        <fileset dir="${libs.dir}">
+		          <include name="*.jar"/>
+		        </fileset>
+			</classpath>
+			<batchtest todir="${targets.test-reports.dir}">
+				<fileset dir="${test.dir}">
+					<include name="**/Test*.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+</project>
