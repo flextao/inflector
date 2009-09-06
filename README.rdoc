@@ -1,0 +1,22 @@
+
+= inflector
+
+Inflector is a Java port of the excellent Inflector class in ruby's ActiveSupport library. Forked from jactiveresource: jactiveresource.org
+
+The methods ported:
+
+  singularize
+  pluralize
+  underscore
+  underscorize
+  dasherize
+
+See org.jactiveresource.Inflector.java for details.
+
+== License
+
+See LICENSE.TXT
+
+== Author
+
+Jared Crapo
